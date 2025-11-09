@@ -1,0 +1,714 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(RecipeApp());
+}
+
+// -------------------- APP --------------------
+class RecipeApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Recipe App',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(primarySwatch: Colors.deepOrange),
+      home: SplashScreen(),
+    );
+  }
+}
+
+// -------------------- SPLASH SCREEN --------------------
+class SplashScreen extends StatefulWidget {
+  @override
+  _SplashScreenState createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration(seconds: 2), () {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => LoginPage()));
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.deepOrange,
+      body: Center(
+        child: Text(
+          "🍴 Foodie's Paradise",
+          style: TextStyle(
+              color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),
+        ),
+      ),
+    );
+  }
+}
+
+// -------------------- LOGIN PAGE --------------------
+class LoginPage extends StatelessWidget {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          // Background image
+          Image.network(
+            "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1600",
+            fit: BoxFit.cover,
+          ),
+          Container(color: Color.fromRGBO(0, 0, 0, 0.5)),
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text("Login",
+                        style: TextStyle(
+                            fontSize: 32,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white)),
+                    SizedBox(height: 40),
+                    TextField(
+                      controller: emailController,
+                      style: TextStyle(color: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: "Email",
+                        labelStyle: TextStyle(color: Colors.white70),
+                        filled: true,
+                        fillColor: Color.fromRGBO(255, 255, 255, 0.2),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 15),
+                    TextField(
+                      controller: passController,
+                      obscureText: true,
+                      style: TextStyle(color: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: "Password",
+                        labelStyle: TextStyle(color: Colors.white70),
+                        filled: true,
+                        fillColor: Color.fromRGBO(255, 255, 255, 0.2),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 25),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.deepOrange,
+                          padding: EdgeInsets.symmetric(
+                              vertical: 14, horizontal: 60),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12))),
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => HomePage()));
+                      },
+                      child: Text("Login", style: TextStyle(fontSize: 18)),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SignUpPage()));
+                      },
+                      child: Text(
+                        "Don't have an account? Sign Up",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// -------------------- SIGNUP PAGE --------------------
+class SignUpPage extends StatelessWidget {
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Sign Up")),
+      body: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: ListView(
+          children: [
+            TextField(
+              controller: nameController,
+              decoration: InputDecoration(labelText: "Full Name"),
+            ),
+            SizedBox(height: 10),
+            TextField(
+              controller: emailController,
+              decoration: InputDecoration(labelText: "Email"),
+            ),
+            SizedBox(height: 10),
+            TextField(
+              controller: passController,
+              obscureText: true,
+              decoration: InputDecoration(labelText: "Password"),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.deepOrange),
+              onPressed: () {
+                Navigator.pushReplacement(
+                    context, MaterialPageRoute(builder: (context) => HomePage()));
+              },
+              child: Text("Create Account"),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// -------------------- HOME PAGE --------------------
+class HomePage extends StatelessWidget {
+  final List<Map<String, dynamic>> categories = [
+    {
+      "name": "Breakfast",
+      "image":
+          "https://images.pexels.com/photos/376464/pexels-photo-376464.jpeg?auto=compress&cs=tinysrgb&w=800"
+    },
+    {
+      "name": "Lunch",
+      "image":
+          "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=800"
+    },
+    {
+      "name": "Dinner",
+      "image":
+          "https://images.pexels.com/photos/70497/pexels-photo-70497.jpeg?auto=compress&cs=tinysrgb&w=800"
+    },
+    {
+      "name": "Desserts",
+      "image":
+          "https://images.pexels.com/photos/3026800/pexels-photo-3026800.jpeg?auto=compress&cs=tinysrgb&w=800"
+    },
+    {
+      "name": "Drinks",
+      "image":
+          "https://images.pexels.com/photos/1117862/pexels-photo-1117862.jpeg?auto=compress&cs=tinysrgb&w=800"
+    },
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Foodie's Paradise"),
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => FavoritesPage()));
+              },
+              icon: Icon(Icons.favorite)),
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => ProfilePage()));
+              },
+              icon: Icon(Icons.person)),
+        ],
+      ),
+      body: GridView.builder(
+        padding: EdgeInsets.all(16),
+        gridDelegate:
+            SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2, childAspectRatio: 1),
+        itemCount: categories.length,
+        itemBuilder: (context, index) {
+          final cat = categories[index];
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          RecipeListPage(category: cat["name"]!)));
+            },
+            child: Card(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+              clipBehavior: Clip.hardEdge,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  Image.network(cat["image"], fit: BoxFit.cover),
+                  Container(color: Color.fromRGBO(0, 0, 0, 0.3)),
+                  Center(
+                    child: Text(
+                      cat["name"],
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+// -------------------- FAVORITES PAGE --------------------
+class FavoritesPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Favorite Recipes"),
+      ),
+      body: Center(
+        child: Text(
+          "Your favorite recipes will appear here!",
+          style: TextStyle(fontSize: 18, color: Colors.grey[600]),
+        ),
+      ),
+    );
+  }
+}
+
+// -------------------- PROFILE PAGE --------------------
+class ProfilePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Profile"),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: CircleAvatar(
+                radius: 60,
+                backgroundImage: NetworkImage("https://www.gravatar.com/avatar?d=mp"), // Placeholder image
+              ),
+            ),
+            SizedBox(height: 20),
+            Text(
+              "User Name: John Doe", // Replace with actual user data
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 10),
+            Text(
+              "Email: john.doe@example.com", // Replace with actual user data
+              style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+            ),
+            SizedBox(height: 30),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.deepOrange,
+                minimumSize: Size.fromHeight(50), // full width button
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              ),
+              onPressed: () {
+                // Implement logout functionality
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginPage()),
+                      (Route<dynamic> route) => false,
+                );
+              },
+              child: Text("Logout", style: TextStyle(fontSize: 18)),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// -------------------- RECIPE MODEL --------------------
+class Recipe {
+  final String title;
+  final String image;
+  final List<String> ingredients;
+  final List<String> steps;
+
+  Recipe({
+    required this.title,
+    required this.image,
+    required this.ingredients,
+    required this.steps,
+  });
+}
+
+// -------------------- ALL RECIPES --------------------
+final Map<String, Recipe> recipesData = {
+  "Pancakes": Recipe(
+    title: "Pancakes",
+    image:
+        "https://images.pexels.com/photos/376464/pexels-photo-376464.jpeg?auto=compress&cs=tinysrgb&w=800",
+    ingredients: [
+      "1 cup all-purpose flour",
+      "2 tablespoons sugar",
+      "1 teaspoon baking powder",
+      "1/2 teaspoon baking soda",
+      "Pinch of salt",
+      "1 cup buttermilk",
+      "1 large egg",
+      "2 tablespoons melted butter",
+    ],
+    steps: [
+      "Mix flour, sugar, baking powder, baking soda, and salt.",
+      "Whisk buttermilk, egg, and melted butter in another bowl.",
+      "Combine wet and dry ingredients until smooth.",
+      "Cook batter in a pan until golden, flip and cook another 1-2 minutes.",
+      "Serve with syrup or fruits.",
+    ],
+  ),
+  "Avocado Toast": Recipe(
+    title: "Avocado Toast",
+    image:
+        "https://images.pexels.com/photos/566566/pexels-photo-566566.jpeg?auto=compress&cs=tinysrgb&w=800",
+    ingredients: [
+      "2 slices whole-grain bread",
+      "1 ripe avocado",
+      "Salt & pepper to taste",
+      "Optional: chili flakes, lemon juice",
+    ],
+    steps: [
+      "Toast the bread slices.",
+      "Mash avocado in a bowl, add salt, pepper, and lemon juice.",
+      "Spread avocado on toast.",
+      "Sprinkle chili flakes if desired. Serve immediately.",
+    ],
+  ),
+  "Grilled Chicken Salad": Recipe(
+    title: "Grilled Chicken Salad",
+    image:
+        "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=800",
+    ingredients: [
+      "1 chicken breast",
+      "2 cups mixed greens",
+      "1/2 cup cherry tomatoes",
+      "1/4 cup sliced cucumbers",
+      "1 tablespoon olive oil",
+      "Salt, pepper, lemon juice",
+    ],
+    steps: [
+      "Season chicken with salt, pepper, and olive oil.",
+      "Grill chicken until cooked, slice it.",
+      "Toss greens, tomatoes, and cucumber with lemon juice and olive oil.",
+      "Place grilled chicken on top and serve.",
+    ],
+  ),
+  "Veg Biryani": Recipe(
+    title: "Veg Biryani",
+    image:
+        "https://images.pexels.com/photos/1640774/pexels-photo-1640774.jpeg?auto=compress&cs=tinysrgb&w=800",
+    ingredients: [
+      "1 cup basmati rice",
+      "1 cup mixed vegetables (carrots, peas, beans)",
+      "1 onion, sliced",
+      "1 tomato, chopped",
+      "1 teaspoon ginger-garlic paste",
+      "1 teaspoon biryani masala",
+      "1/2 teaspoon turmeric",
+      "2 tablespoons oil",
+    ],
+    steps: [
+      "Rinse rice and cook until 70% done.",
+      "Heat oil, fry onions until golden, add ginger-garlic paste.",
+      "Add tomatoes and vegetables, cook 5 mins.",
+      "Add rice, biryani masala, turmeric, and water, cook covered until rice is fully cooked.",
+      "Serve hot with raita.",
+    ],
+  ),
+  "Steak with Vegetables": Recipe(
+    title: "Steak with Vegetables",
+    image:
+        "https://images.pexels.com/photos/70497/pexels-photo-70497.jpeg?auto=compress&cs=tinysrgb&w=800",
+    ingredients: [
+      "1 steak (200–250g)",
+      "1 tablespoon olive oil",
+      "Salt & pepper",
+      "1 cup mixed vegetables (broccoli, carrots, bell peppers)",
+    ],
+    steps: [
+      "Season steak with salt and pepper.",
+      "Heat oil in a skillet, cook steak to desired doneness.",
+      "Sauté vegetables with salt and pepper.",
+      "Serve steak with vegetables on the side.",
+    ],
+  ),
+  "Pasta Alfredo": Recipe(
+    title: "Pasta Alfredo",
+    image:
+        "https://images.pexels.com/photos/1437267/pexels-photo-1437267.jpeg?auto=compress&cs=tinysrgb&w=800",
+    ingredients: [
+      "200g pasta (penne or fettuccine)",
+      "1 cup heavy cream",
+      "1/2 cup grated Parmesan cheese",
+      "2 tablespoons butter",
+      "Salt & pepper",
+      "Optional: garlic, parsley",
+    ],
+    steps: [
+      "Cook pasta as per package instructions.",
+      "In a pan, melt butter, add cream and cheese. Stir until smooth.",
+      "Add cooked pasta, mix, season with salt and pepper.",
+      "Garnish with parsley and serve hot.",
+    ],
+  ),
+  "Chocolate Cake": Recipe(
+    title: "Chocolate Cake",
+    image:
+        "https://images.pexels.com/photos/3026800/pexels-photo-3026800.jpeg?auto=compress&cs=tinysrgb&w=800",
+    ingredients: [
+      "1 1/2 cups all-purpose flour",
+      "1 cup sugar",
+      "1/4 cup cocoa powder",
+      "1 teaspoon baking soda",
+      "1/2 teaspoon salt",
+      "1 cup water",
+      "1/3 cup vegetable oil",
+      "1 teaspoon vanilla extract",
+      "1 teaspoon vinegar",
+    ],
+    steps: [
+      "Preheat oven to 180°C (350°F).",
+      "Mix dry ingredients in a bowl.",
+      "Add wet ingredients, stir until smooth.",
+      "Pour into a greased pan, bake for 30–35 minutes.",
+      "Cool and serve.",
+    ],
+  ),
+  "Cupcakes": Recipe(
+    title: "Cupcakes",
+    image:
+        "https://images.pexels.com/photos/227432/pexels-photo-227432.jpeg?auto=compress&cs=tinysrgb&w=800",
+    ingredients: [
+      "1 1/2 cups flour",
+      "1 cup sugar",
+      "1/2 cup butter",
+      "2 eggs",
+      "1/2 cup milk",
+      "1 teaspoon vanilla extract",
+      "1 teaspoon baking powder",
+    ],
+    steps: [
+      "Preheat oven to 180°C (350°F).",
+      "Cream butter and sugar, add eggs and vanilla.",
+      "Add flour, milk, and baking powder, mix well.",
+      "Pour batter into cupcake liners, bake 20–25 mins.",
+      "Cool and frost as desired.",
+    ],
+  ),
+  "Cold Coffee": Recipe(
+    title: "Cold Coffee",
+    image:
+        "https://images.pexels.com/photos/1117862/pexels-photo-1117862.jpeg?auto=compress&cs=tinysrgb&w=800",
+    ingredients: [
+      "1 cup cold milk",
+      "1 tablespoon instant coffee",
+      "1 tablespoon sugar",
+      "Ice cubes",
+      "Optional: whipped cream",
+    ],
+    steps: [
+      "Blend milk, coffee, sugar, and ice cubes until frothy.",
+      "Pour into a glass, top with whipped cream.",
+    ],
+  ),
+  "Mango Smoothie": Recipe(
+    title: "Mango Smoothie",
+    image:
+        "https://images.pexels.com/photos/461198/pexels-photo-461198.jpeg?auto=compress&cs=tinysrgb&w=800",
+    ingredients: [
+      "1 ripe mango",
+      "1/2 cup yogurt",
+      "1/2 cup milk",
+      "1 teaspoon honey",
+      "Ice cubes",
+    ],
+    steps: [
+      "Peel and chop mango.",
+      "Blend mango, yogurt, milk, honey, and ice until smooth.",
+      "Serve chilled.",
+    ],
+  ),
+};
+
+// -------------------- RECIPE LIST PAGE --------------------
+class RecipeListPage extends StatelessWidget {
+  final String category;
+  RecipeListPage({required this.category});
+
+  final Map<String, List<String>> categoryRecipes = {
+    "Breakfast": ["Pancakes", "Avocado Toast"],
+    "Lunch": ["Grilled Chicken Salad", "Veg Biryani"],
+    "Dinner": ["Steak with Vegetables", "Pasta Alfredo"],
+    "Desserts": ["Chocolate Cake", "Cupcakes"],
+    "Drinks": ["Cold Coffee", "Mango Smoothie"],
+  };
+
+  @override
+  Widget build(BuildContext context) {
+    final recipes = categoryRecipes[category] ?? [];
+    return Scaffold(
+      appBar: AppBar(title: Text("$category Recipes")),
+      body: ListView.builder(
+        itemCount: recipes.length,
+        itemBuilder: (context, index) {
+          final recipeName = recipes[index];
+          final recipe = recipesData[recipeName]!;
+          return ListTile(
+            leading: Image.network(recipe.image, width: 80, fit: BoxFit.cover),
+            title: Text(recipe.title),
+            trailing: Icon(Icons.arrow_forward_ios),
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          RecipeDetailPage(recipeName: recipe.title)));
+            },
+          );
+        },
+      ),
+    );
+  }
+}
+
+// -------------------- RECIPE DETAIL PAGE --------------------
+class RecipeDetailPage extends StatelessWidget {
+  final String recipeName;
+  RecipeDetailPage({required this.recipeName});
+
+  @override
+  Widget build(BuildContext context) {
+    final recipe = recipesData[recipeName];
+
+    if (recipe == null) {
+      return Scaffold(
+        appBar: AppBar(title: Text("Recipe Not Found")),
+        body: Center(child: Text("Recipe details not available.")),
+      );
+    }
+
+    return Scaffold(
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          Image.network(recipe.image, fit: BoxFit.cover),
+          Container(color: Color.fromRGBO(0, 0, 0, 0.4)),
+          SingleChildScrollView(
+            padding: EdgeInsets.all(24),
+            // The original code was cut off here. Assuming further content for RecipeDetailPage's body.
+            // Placeholder for the rest of the RecipeDetailPage content,
+            // as it was not directly related to the error.
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: kToolbarHeight), // Space for the app bar area
+                Text(
+                  recipe.title,
+                  style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                SizedBox(height: 20),
+                Text(
+                  "Ingredients:",
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                SizedBox(height: 10),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: recipe.ingredients
+                      .map((ingredient) => Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 4.0),
+                            child: Text(
+                              "- $ingredient",
+                              style: TextStyle(fontSize: 16, color: Colors.white70),
+                            ),
+                          ))
+                      .toList(),
+                ),
+                SizedBox(height: 20),
+                Text(
+                  "Steps:",
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                SizedBox(height: 10),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: recipe.steps
+                      .asMap()
+                      .entries
+                      .map((entry) => Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 4.0),
+                            child: Text(
+                              "${entry.key + 1}. ${entry.value}",
+                              style: TextStyle(fontSize: 16, color: Colors.white70),
+                            ),
+                          ))
+                      .toList(),
+                ),
+                SizedBox(height: 50), // Extra space at the bottom
+              ],
+            ),
+          ),
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
